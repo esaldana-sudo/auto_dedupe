@@ -1,0 +1,18 @@
+# Bytecode cache
+__pycache__/
+*.pyc
+
+# Virtual environments (if you ever create one inside repo)
+.venv/
+
+# Ignore runtime state (JSON DB + checkpoints)
+res/*.json
+res/.checkpoint.json
+
+# Ignore logs
+log/*
+!log/.gitkeep   # but keep the empty folder in repo
+
+# Ignore duplicates of media (just in case)
+*_duplicates/
+*_duplicates_bad/
