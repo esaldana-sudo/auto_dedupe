@@ -4,6 +4,7 @@ __pycache__/
 
 # Virtual environments (if you ever create one inside repo)
 .venv/
+venv/
 
 # Ignore runtime state (JSON DB + checkpoints)
 res/*.json
