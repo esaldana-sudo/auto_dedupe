@@ -17,10 +17,10 @@ SUPPORTED_EXTENSIONS = {
     '.cr2', '.nef', '.arw', '.dng',
     '.mp4', '.mov', '.avi', '.mkv', '.mts', '.3gp', '.wmv'
 }
-HASH_DB_FILE = "_Config/familia_hashes.json"
-CHECKPOINT_FILE = "_Config/.checkpoint.json"
-DUPLICATE_FOLDER = "_duplicates"
-NO_DATE_FOLDER = "_no_date"
+HASH_DB_FILE = "res/familia_hashes.json"
+CHECKPOINT_FILE = "res/.checkpoint.json"
+DUPLICATE_FOLDER = "/mnt/my_drive/media/_duplicates"
+NO_DATE_FOLDER = "/mnt/my_drive/media/_no_date"
 # ------------------------------------------- #
 
 def compute_sha256(file_path, block_size=65536):
@@ -124,8 +124,8 @@ def get_all_files(input_dir, input_list, limit):
 def main(input_dir, output_dir, dry_run=False, delete=False, dedupe_only=False, input_list=None, limit=None, verbose=False, log_file=None):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
-    hash_db = load_json(output_dir / HASH_DB_FILE)
-    checkpoint = load_json(output_dir / CHECKPOINT_FILE)
+    hash_db = load_json(HASH_DB_FILE)
+    checkpoint = load_json(CHECKPOINT_FILE)
     seen = set()
     duplicates = 0
     hash_failures = 0
@@ -154,7 +154,6 @@ def main(input_dir, output_dir, dry_run=False, delete=False, dedupe_only=False, 
         if not file_hash:
             hash_failures += 1
             error_log_lines.append(f"HASH_FAIL | {full_path}")
-            continue
             continue
         seen.add(file_hash)
         checkpoint[rel_path] = True
@@ -191,8 +190,8 @@ def main(input_dir, output_dir, dry_run=False, delete=False, dedupe_only=False, 
             log(f"✅ Sorted: {full_path}")
 
     if not dry_run:
-        save_json(output_dir / HASH_DB_FILE, hash_db)
-        save_json(output_dir / CHECKPOINT_FILE, checkpoint)
+        save_json(HASH_DB_FILE, hash_db)
+        save_json(CHECKPOINT_FILE, checkpoint)
 
     summary = f"""
 📊 Summary
@@ -205,7 +204,7 @@ def main(input_dir, output_dir, dry_run=False, delete=False, dedupe_only=False, 
     print(f"   Hash Failures : {hash_failures}")
     print(f"   Copy Errors   : {copy_failures}")
     if error_log_lines:
-        err_path = output_dir / "_Config" / f"errors_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"
+        err_path = "log" / f"errors_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"
         Path(err_path).parent.mkdir(parents=True, exist_ok=True)
         with open(err_path, "w", encoding="utf-8") as ef:
             ef.write("\n".join(error_log_lines))
