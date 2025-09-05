@@ -17,3 +17,6 @@ log/*
 # Ignore duplicates of media (just in case)
 *_duplicates/
 *_duplicates_bad/
+
+# Ignore local config file with sensitive information
+config.env
